@@ -63,7 +63,7 @@ node_modules/
 jspm_packages/
 
 # lock file
-package.lock.json
+package-lock.json
 yarn.lock
 
 # Optional npm cache directory
