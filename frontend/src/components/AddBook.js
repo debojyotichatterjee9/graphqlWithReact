@@ -1,6 +1,7 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import { getAuthorsQuery } from "../gqlQueries/queries";
+import {flowRight as compose} from 'lodash'
+import { getAuthorsQuery, addBookMutation } from "../gqlQueries/queries";
 
 
 class AddBook extends React.Component {
@@ -16,7 +17,8 @@ class AddBook extends React.Component {
 
 // populating the author list
 	displayAtuthors() {
-		var data = this.props.data;
+		console.log(this.props)
+		var data = this.props.AUTHOR_QUERY;
 		if(data.loading) {
 			return(<option disabled>Loading Authors...</option>)
 		}
@@ -28,7 +30,13 @@ class AddBook extends React.Component {
 // to add the new entries to the db
 	submitForm(event) {
 		event.preventDefault();
-		console.log(this.state)
+		this.props.ADD_BOOK_QUERY({
+			variables: {
+				name: this.state.name,
+				genre: this.state.genre,
+				authorId: this.state.authorId
+			}
+		});
 	}
 
     render() {
@@ -56,5 +64,8 @@ class AddBook extends React.Component {
         );
     }
 }
-
-export default graphql(getAuthorsQuery)(AddBook);
+// using compose from react-apollo as there are more than one quries reqd to bind with this compoment
+export default compose(
+	graphql(getAuthorsQuery,{name: "AUTHOR_QUERY"}),
+	graphql(addBookMutation,{name: "ADD_BOOK_QUERY"})
+)(AddBook);
