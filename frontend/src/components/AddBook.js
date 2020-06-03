@@ -1,6 +1,6 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
-import {flowRight as compose} from 'lodash'
+import {flowRight } from 'lodash'
 import { getAuthorsQuery, addBookMutation } from "../gqlQueries/queries";
 
 
@@ -64,8 +64,8 @@ class AddBook extends React.Component {
         );
     }
 }
-// using compose from react-apollo as there are more than one quries reqd to bind with this compoment
-export default compose(
+// using flowRight from lodash as there are more than one quries reqd to bind with this compoment
+export default flowRight(
 	graphql(getAuthorsQuery,{name: "AUTHOR_QUERY"}),
 	graphql(addBookMutation,{name: "ADD_BOOK_QUERY"})
 )(AddBook);
